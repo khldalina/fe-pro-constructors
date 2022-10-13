@@ -17,32 +17,50 @@ export function User(name, date) {
     this.friends = [];
     this.likes = [];
 
-    this.addToFriends = function (friend){
-        if (this.friends.includes(friend)) {
-            this.friends = this.friends.filter((user) => user !== friend);
-            friend.friends = this.friends.filter((user) => user !== this);
-        }else {
-            this.friends.push(friend);
-            friend.friends.push(this);
+    this.addToFriends = function (user) {
+        if (this.friends.includes(user)) {
+            this.friends = this.friends.filter((friend) => friend !== user);
+            user.friends = user.friends.filter((friend) => friend !== this)
+        } else {
+            this.friends.push(user);
+            user.friends.push(this);
         }
     };
 
     this.removeFriend = this.addToFriends;
-    this.likeBook = function (book){
+
+    this.likeBook = function (book) {
         if (this.likes.includes(book)) {
-            this.likes = this.likes.filter((user) => user !== book);
-            book.likes = this.likes.filter((user) => user !== this);
-        }else {
-            this.friends.push(book);
-            book.friends.push(this);
+            this.likes = this.likes.filter((liked) => liked !== book);
+            book.likedUsers = book.likedUsers.filter((user) => user !== this);
+        } else {
+            this.likes.push(book);
+            book.likedUsers.push(this);
         }
-    }
+    };
+
     this.unlikeBook = this.likeBook;
 
-    Object.defineProperty(this ,'friendNames' , {
+    Object.defineProperty(this, 'friendsNames', {
         get() {
-            return this.friends.map(({name}) => name).join(',');
+            let friendsNames = this.friends.map(({name}) => name).join(', ');
+            return friendsNames;
         }
-      });
-}
+    });
 
+    Object.defineProperty(this, 'likedBooks', {
+        get() {
+            let likedBooks = this.likes.map(({title}) => title).join(', ');
+            return likedBooks;
+        }
+    });
+
+    Object.defineProperty(this, 'publishedBooks', {
+        get() {
+            let publishedBooks = this.myBooks.map(({title}) => title).join(', ');
+            return publishedBooks;
+        }
+    });
+
+
+}

@@ -16,38 +16,45 @@ import { User } from './User.js';
 export function Book(title, year, publicationBy, authors) {
     this.title = title;
     this.year = year;
-    this.publicationBy = publicationBy;
-    this.authors = authors;
     this.likedUsers = [];
 
+    this.publicationBy = publicationBy;
     publicationBy.myBooks.push(this);
+    this.authors = authors;
+
     authors.forEach((author) => {
         author.books.push(this);
     });
-    Object.defineProperty(this, 'suggestedBooks', {
-        get(){
-            return this.authors.reduce((accum, author) =>{
-                const authorsBook = books.map((book) => book.publicationBy);
-                const uniquePublicators = new Set(publicators);
-                return [...uniquePublicators]
-                const originalBooks = new Set([...accum,...author.books]);
-                return [originalBooks];
-            }, [])
-        }
-    });
+
     Object.defineProperty(this, 'suggestedPublicators', {
-        get(){
-           return this.authors.reduce((accum, author) =>{
-               const publicators = author.books.map((book) => book.publicationBy);
-               const uniquePublicators = new Set(publicators);
-               return [...uniquePublicators]
-            const uniguelBooks = new Set([...accum,...author.books]);
-            return [uniguelBooks];
-           }, [])
-               .filter((publicator) => publicator !== this.publicationBy)
-               .map(({name}) => name).join(',');
+        get() {
+            return this.authors.reduce((accum, author) => {
+                let publicators = author.books.map((book) => book.publicationBy);
+                let uniquePublicators = new Set(publicators);
+                console.log(uniquePublicators);
+                return [...uniquePublicators];
+            }, [])
+                .filter((publicator) => publicator !== this.publicationBy)
+                .map(({name}) => name).join(', ');
         }
     });
 
+
+    Object.defineProperty(this, 'suggestedBooks', {
+        get() {
+            return this.authors.reduce((accum, author) => {
+                let authorsBooks = author.books.map((book) => book);
+                let uniqueBooks = new Set(authorsBooks);
+                console.log(authorsBooks);
+                console.log(uniqueBooks);
+                return [...uniqueBooks];
+
+
+            }, [])
+                .filter((book) => book !== this)
+                .map(({title}) => title).join(', ');
+        }
+
+    });
 
 }
