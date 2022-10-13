@@ -26,9 +26,6 @@ export function User(name, date) {
             user.friends.push(this);
         }
     };
-
-    this.removeFriend = this.addToFriends;
-
     this.likeBook = function (book) {
         if (this.likes.includes(book)) {
             this.likes = this.likes.filter((liked) => liked !== book);
@@ -38,9 +35,8 @@ export function User(name, date) {
             book.likedUsers.push(this);
         }
     };
-
+    this.removeFriend = this.addToFriends;
     this.unlikeBook = this.likeBook;
-
     Object.defineProperty(this, 'friendsNames', {
         get() {
             let friendsNames = this.friends.map(({name}) => name).join(', ');
@@ -54,13 +50,10 @@ export function User(name, date) {
             return likedBooks;
         }
     });
-
     Object.defineProperty(this, 'publishedBooks', {
         get() {
             let publishedBooks = this.myBooks.map(({title}) => title).join(', ');
             return publishedBooks;
         }
     });
-
-
 }
